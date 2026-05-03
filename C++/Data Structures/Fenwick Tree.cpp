@@ -1,37 +1,33 @@
-class Fenwick {
-public:
-	int n;  vector<ll> t; int LOGN;
-	Fenwick_Tree(int sz) {
-		this -> n = sz;
-		this -> LOGN = 31 - __builtin_clz(sz);
-		t.assign(n + 5, 0);
-	};
-	void build(vector<ll> &a) {
-	    for (int i = 1; i <= n; i++) {
-			t[i] += a[i-1];
-	        int par = i + (i & -i);
-	        if (par <= n) t[par] += t[i];
-	    }
-	}
-	int kth_element(int k) {
-	    int idx = 0;
-	    for (int i = 1 << LOGN; i > 0; i >>= 1) {
-	        if (idx + i <= n && tree[idx + i] < k) {
-	            idx += i;
-	            k -= tree[idx];
-	        }
-	    }
-    	return idx + 1;
-	}
-	ll make_query(ll idx) {
-		ll res = 0;
-		for (; idx > 0; idx -= (idx & (-idx)))  res += t[idx];
-		return res;
-	}
-	ll query(ll l, ll r) {
-		return make_query(r) - make_query(l - 1);
-	}
-	void add(ll idx, ll x) {
-		for (; idx <= n; idx += (idx & (-idx)))  t[idx] += x;
-	}
+struct BIT{
+  int n;
+  vector<ll> t;
+  BIT(int n){
+    this->n = n;
+    t.assign(n+1, 0);
+  }
+
+  ll query(int i) {
+    ll res = 0;
+    for (; i>0; i-=(i & -i))
+      res += t[i];
+    return res;
+  }
+
+  void update(int i, ll x=1){
+    for (; i<=n; i +=(i&-i))
+      t[i] += x;
+  }
+  // Finds the smallest index where the prefix sum is >= w
+  int lower_bound(ll w){
+    int x = 0;
+    int k = 1;
+    while (k*2 <= n)
+      k *=2;
+    for (; k > 0; k >>= 1)
+      if (x+k <= n && t[x+k] < w){
+        w -= t[x+k];
+        x += k;
+      }
+    return x+1;
+  }
 };
