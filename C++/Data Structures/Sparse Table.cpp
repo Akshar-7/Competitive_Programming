@@ -1,45 +1,44 @@
 template <typename Node>
-class Sparse {
+class Sparse{
 public:
-	ll n, LOG;
-	vector<vector<Node>> table;
-	vector<ll> lg;
+  int n, LOG;
+  vector<vector<Node>> t;
+  vector<int> lg;
  
-	Sparse(vector<ll> &a) {
-		ll sz = a.size();
-		this -> n = sz;
-		this -> LOG = log2(n) + 1;
-		table = vector<vector<Node>>(LOG, vector<Node>(n));
-		for (ll i = 0; i < n; i++) table[0][i] = a[i];
-		lg = vector<ll>(n + 1, 0);
-		build();
-	}
+  Sparse(vector<int> &a){
+    int sz = a.size();
+    this->n = sz;
+    this->LOG = log2(n) +1;
+    t = vector<vector<Node>>(LOG, vector<Node>(n));
+    for (int i=0; i<n; i++) t[0][i] = a[i];
+    lg = vector<int>(n+1, 0);
+    build();
+  }
  
-	void build() {
-		for (ll i = 2; i <= n; i++) lg[i] = lg[i / 2] + 1;
-		for (ll j = 1; j < LOG; j++) {
-			ll len = (1 << j);
-			for (ll i = 0; i + len <= n; i++)
-				table[j][i].merge(table[j - 1][i], table[j - 1][i + (1 << (j - 1))]);
-		}
-	}
+  void build() {
+    for (int i=2; i<=n; i++) lg[i] = lg[i/2] +1;
+    for (int j=1; j<LOG; j++){
+      int len = (1<<j);
+      for (int i=0; i+len<=n; i++)
+        t[j][i].merge(t[j-1][i], t[j-1][i +(1<<(j-1))]);
+    }
+  }
  
-	Node query(ll l, ll r) {
-		ll x = lg[r - l + 1];
-		Node ans = Node();
-		ans.merge(table[x][l], table[x][r - (1 << x) + 1]);
-		return ans;
-	}
+  Node query(int l, int r) {
+    int x = lg[r-l+1];
+    Node ans = Node();
+    ans.merge(t[x][l], t[x][r -(1<<x) +1]);
+    return ans;
+  }
 };
  
-struct Node1 {
-	ll x = 0;
-	Node1() {}
-	Node1(ll _x) : x(_x) {}
-	void merge(Node1& l, Node1& r) {
-		this -> x = max(l.x, r.x);
-	}
-	ll val() {
-		return this -> x;
-	}
+struct Node{
+  int mx = 0;
+  int mn = 1e9;
+  Node() {}
+  Node(int x) : mx(x), mn(x) {}
+  void merge(Node& l, Node& r){
+    this->mx = max(l.mx, r.mx);
+    this->mn = min(l.mn, r.mn);
+  }
 };
