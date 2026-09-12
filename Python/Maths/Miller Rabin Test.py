@@ -21,6 +21,6 @@ def mrtest(n):
   while ((d&1)==0):
     d>>=1; r+=1
   for a in [2, 325, 9375, 28178, 450775, 9780504, 1795265022]:
-    if (n%a==0) return n==a;
+    if (n%a==0): return n==a
     if (cmpst(n, a, d, r)): return False
   return True
