@@ -20,7 +20,7 @@ def mrtest(n):
   d = n-1
   while ((d&1)==0):
     d>>=1; r+=1
-  for a in [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37]:
-    if (n==a): return True
+  for a in [2, 325, 9375, 28178, 450775, 9780504, 1795265022]:
+    if (n%a==0) return n==a;
     if (cmpst(n, a, d, r)): return False
   return True
