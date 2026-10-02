@@ -5,7 +5,7 @@ def scc_dfs(x):
   t+=1
   for v in g[x]:
     if tt[v]==-1:
-      scc_dfs(v,x)
+      scc_dfs(v)
       low[x] = min(low[x], low[v])
     elif instack[v]:
       low[x] = min(low[x], tt[v])
@@ -26,5 +26,5 @@ instack = [0]*(n+1)
 stk = []
 for i in range(1,n+1):
   if tt[i]==-1:
-    dfs(i)
+    scc_dfs(i)
 print(sccs)
